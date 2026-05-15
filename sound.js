@@ -105,7 +105,7 @@ class SoundManager {
   _playMusicLoop() {
     if (!this.ctx) return;
     
-    const bpm = 160;
+    const bpm = 170;
     const secondsPerBeat = 60.0 / bpm;
     const step = secondsPerBeat / 4; // 16th notes
 
@@ -125,59 +125,63 @@ class SoundManager {
   }
 
   _scheduleNote(stepIdx, time) {
+    // Bateria Post-Punk (Reta e enérgica)
     if (stepIdx % 4 === 0) this.playKick(time);
     if (stepIdx % 8 === 4) this.playSnare(time);
-    if (stepIdx % 2 !== 0) this.playHiHat(time);
+    if (stepIdx % 2 === 0) this.playHiHat(time);
 
+    // Progressão de acordes: A - Bm - C#m - D
     const bar = Math.floor(stepIdx / 16);
-    const bassFreqs = [55.00, 43.65, 32.70, 49.00];
-    const baseFreq = bassFreqs[bar % 4];
+    const progression = [
+      { bass: 110.00, chord: [220, 277.18, 329.63] }, // A Major
+      { bass: 123.47, chord: [246.94, 293.66, 369.99] }, // B Minor
+      { bass: 138.59, chord: [277.18, 329.63, 415.30] }, // C# Minor
+      { bass: 146.83, chord: [293.66, 369.99, 440.00] }  // D Major
+    ];
     
-    if (stepIdx % 2 === 0 || stepIdx % 3 === 0) {
+    const current = progression[bar % 4];
+
+    // Baixo (Oitava abaixo)
+    if (stepIdx % 4 === 0 || stepIdx % 8 === 6) {
       const o = this.ctx.createOscillator();
       const g = this.ctx.createGain();
-      o.type = 'sawtooth';
-      o.frequency.value = baseFreq * (stepIdx % 4 === 0 ? 1 : 2);
+      o.type = 'triangle';
+      o.frequency.value = current.bass / 2;
       
-      const filter = this.ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(400, time);
-      filter.frequency.exponentialRampToValueAtTime(100, time + 0.1);
-
-      g.gain.setValueAtTime(0.15, time);
-      g.gain.exponentialRampToValueAtTime(0.001, time + 0.15);
+      g.gain.setValueAtTime(0.2, time);
+      g.gain.exponentialRampToValueAtTime(0.001, time + 0.3);
       
-      o.connect(filter);
-      filter.connect(g);
+      o.connect(g);
       g.connect(this.musicGain);
-      
       o.start(time);
-      o.stop(time + 0.15);
+      o.stop(time + 0.3);
     }
-    
-    if (stepIdx % 2 !== 0) {
-        const arpNotes = [
-            [220, 261.63, 329.63, 440],
-            [174.61, 220, 261.63, 349.23],
-            [261.63, 329.63, 392, 523.25],
-            [196, 246.94, 293.66, 392]
-        ];
-        const notes = arpNotes[bar % 4];
-        const freq = notes[(stepIdx % 4)] * 2;
-        
+
+    // O Famoso Riff de Guitarra (Boys Don't Cry)
+    // A, B, C#, D, C#, B, A
+    const riffNotes = [440.00, 493.88, 554.37, 587.33, 554.37, 493.88, 440.00, 440.00];
+    if (stepIdx % 2 === 0) {
+      const noteIdx = (stepIdx % 16) / 2;
+      if (noteIdx < riffNotes.length) {
         const o = this.ctx.createOscillator();
         const g = this.ctx.createGain();
-        o.type = 'square';
-        o.frequency.value = freq;
+        o.type = 'square'; // Som levemente oitavado/limpo
+        o.frequency.value = riffNotes[noteIdx];
         
-        g.gain.setValueAtTime(0.05, time);
-        g.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
+        // Filtro para suavizar o square e parecer mais uma guitarra clean
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 2000;
+
+        g.gain.setValueAtTime(0.1, time);
+        g.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
         
-        o.connect(g);
+        o.connect(filter);
+        filter.connect(g);
         g.connect(this.musicGain);
-        
         o.start(time);
-        o.stop(time + 0.1);
+        o.stop(time + 0.2);
+      }
     }
   }
 
