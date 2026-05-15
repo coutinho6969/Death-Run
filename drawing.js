@@ -133,9 +133,9 @@ function drawNitroPickup(ctx, x, y, r, frame) {
   const pulse = 0.8 + Math.sin(frame * 0.08) * 0.2;
   const glowR = r * 1.5 * pulse;
   const glow = ctx.createRadialGradient(0, 0, r * 0.3, 0, 0, glowR);
-  glow.addColorStop(0, 'rgba(56, 189, 248, 0.5)');
-  glow.addColorStop(0.6, 'rgba(99, 102, 241, 0.2)');
-  glow.addColorStop(1, 'rgba(99, 102, 241, 0)');
+  glow.addColorStop(0, 'rgba(255, 0, 0, 0.5)');
+  glow.addColorStop(0.6, 'rgba(255, 77, 77, 0.2)');
+  glow.addColorStop(1, 'rgba(255, 0, 0, 0)');
   ctx.fillStyle = glow;
   ctx.beginPath();
   ctx.arc(0, 0, glowR, 0, Math.PI * 2);
@@ -145,11 +145,11 @@ function drawNitroPickup(ctx, x, y, r, frame) {
   ctx.beginPath();
   ctx.arc(0, 0, r, 0, Math.PI * 2);
   const bg = ctx.createRadialGradient(0, -r * 0.3, 0, 0, 0, r);
-  bg.addColorStop(0, '#60a5fa');
-  bg.addColorStop(1, '#3b82f6');
+  bg.addColorStop(0, '#ff4d4d');
+  bg.addColorStop(1, '#ff0000');
   ctx.fillStyle = bg;
   ctx.fill();
-  ctx.strokeStyle = '#93c5fd';
+  ctx.strokeStyle = '#ffcccc';
   ctx.lineWidth = 2;
   ctx.stroke();
 

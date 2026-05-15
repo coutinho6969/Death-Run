@@ -429,7 +429,7 @@ class Game {
           this.particles.push({
             x: nx, y: ny, vx: Math.cos(a) * 3, vy: Math.sin(a) * 3,
             life: 25, maxLife: 25, size: 3 + Math.random() * 2,
-            color: ['#60a5fa', '#38bdf8', '#818cf8', '#fef08a'][Math.floor(Math.random() * 4)]
+            color: ['#ff0000', '#ff4d4d', '#ff8080', '#fff'][Math.floor(Math.random() * 4)]
           });
         }
         this.nitroPickups.splice(i, 1);
@@ -458,7 +458,7 @@ class Game {
           vy: 3 + Math.random() * 5,
           life: 18 + Math.random() * 12, maxLife: 30,
           size: 3 + Math.random() * 4,
-          color: ['#60a5fa', '#818cf8', '#c084fc', '#38bdf8'][Math.floor(Math.random() * 4)]
+          color: ['#ff0000', '#ff4d4d', '#ff0000', '#ff8080'][Math.floor(Math.random() * 4)]
         });
       }
       // Side trail particles
@@ -616,8 +616,8 @@ class Game {
     if (this.nitroActive && this.state === 'playing') {
       const g = ctx.createRadialGradient(this.W / 2, this.H / 2, this.W * 0.2, this.W / 2, this.H / 2, this.W);
       g.addColorStop(0, 'transparent');
-      g.addColorStop(0.7, `rgba(56, 189, 248, ${0.05 + Math.sin(this.frame * 0.1) * 0.03})`);
-      g.addColorStop(1, `rgba(99, 102, 241, ${0.2 + Math.sin(this.frame * 0.08) * 0.05})`);
+      g.addColorStop(0.7, `rgba(255, 0, 0, ${0.05 + Math.sin(this.frame * 0.1) * 0.03})`);
+      g.addColorStop(1, `rgba(139, 0, 0, ${0.2 + Math.sin(this.frame * 0.08) * 0.05})`);
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, this.W, this.H);
     }
@@ -703,7 +703,7 @@ class Game {
 
     // Power Aura if nitro is active (indestructible state)
     if (this.nitroActive) {
-      ctx.shadowColor = '#60a5fa';
+      ctx.shadowColor = '#ff0000';
       ctx.shadowBlur = 15 + Math.sin(this.frame * 0.2) * 10;
       
       // Outer glow ring
